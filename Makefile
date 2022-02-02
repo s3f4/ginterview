@@ -26,20 +26,20 @@ up:
 down:
 	docker-compose -f docker-compose.yaml down 
 
-## mongo-req: successful mongo req
-mongo-req:
+## mongo-post: successful mongo req
+mongo-post:
 	curl -X POST \
 			-H "Content-type: application/json" \
 			-H "Accept: application/json" \
 			-d '{"startDate": "2016-01-26","endDate": "2018-02-02","minCount": 2700,"maxCount": 3000}' \
 			"http://localhost:3001/mongo"
 
-mongo-req2:
+mongo-post-prod:
 	curl -X POST \
 			-H "Content-type: application/json" \
 			-H "Accept: application/json" \
-			-d '{"startDate": "2016-01-26","endDate": "2018-22-02","minCount": 2700,"maxCount": 3000}' \
-			"http://localhost:3001/mongo"
+			-d '{"startDate": "2016-01-26","endDate": "2018-02-02","minCount": 2700,"maxCount": 3000}' \
+			"http://35.180.189.175/mongo"
 
 inmemory-post:
 	curl -X POST \
@@ -48,12 +48,12 @@ inmemory-post:
 			-d '{"key": "active-tabs","value": "getir"}' \
 			"http://localhost:3001/in-memory"
 
-inmemory-post2:
+inmemory-post-prod:
 	curl -X POST \
 			-H "Content-type: application/json" \
 			-H "Accept: application/json" \
-			-d '{"value": "getir"}' \
-			"http://localhost:3001/in-memory"
+			-d '{"key": "active-tabs","value": "getir"}' \
+			"http://35.180.189.175/in-memory"
 
 inmemory-get:
 	curl -X GET \
@@ -61,9 +61,17 @@ inmemory-get:
 			-H "Accept: application/json" \
 			"http://localhost:3001/in-memory?key=active-tabs"
 
+inmemory-get-prod:
+	curl -X GET \
+			-H "Content-type: application/json" \
+			-H "Accept: application/json" \
+			"http://35.180.189.175/in-memory?key=active-tabs"
+
+init: 
+	cd infra && terraform init
 ## apply: spins up an ec2 instance and install go files
 apply:
-	rm -f api/api && cd infra &&  terraform apply -auto-approve
+	rm -f api/api && cd infra && terraform apply -auto-approve
 
 ## apply: destroy ec2 instance
 destroy:
